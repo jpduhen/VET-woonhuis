@@ -18,25 +18,29 @@ flowchart BT
   MK --> G3["Groep 3 · keuken"]
   MK --> G4["Groep 4 · zolder"]
 
-  G1 --> GAR["Garage-aansluitpunt · RFID 1"]
+  G1 --> GAR1["Garage A · RFID 1"]
+  GAR1 --> GAR2["Garage B · RFID 2"]
+  G1 --> BER1["Berging A · RFID 3"]
+  BER1 --> BER2["Berging B · RFID 4"]
   G1 --> WM["Wasmachine · vast"]
   G1 --> DR["Droger · vast"]
   G1 --> WP["Warmtepomp · vast"]
 
-  G2 --> W1["Woonkamer A · RFID 2"]
-  W1 --> W2["Woonkamer B · RFID 3"]
+  G2 --> W1["Woonkamer A · RFID 5"]
+  W1 --> W2["Woonkamer B · RFID 6"]
 
   G3 --> KO["Kookplaat / oven · vast"]
-  G3 --> K1["Keukenblad · RFID 4"]
-  K1 --> K2["Eettafel · RFID 5"]
+  G3 --> K1["Keukenblad · RFID 7"]
+  K1 --> K2["Eettafel · RFID 8"]
 
-  G4 --> Z1["Zolder A · RFID 6"]
-  Z1 --> Z2["Zolder B · RFID 7"]
+  G4 --> Z1["Slaapkamer A · RFID 9"]
+  Z1 --> Z2["Slaapkamer B · RFID 10"]
   G4 --> PV["PV-installatie · vast"]
-  G4 --> DAK["Dak-/techniekpunt · RFID 8"]
+  G4 --> DAK1["Dak-/techniekpunt A · RFID 11"]
+  DAK1 --> DAK2["Dak-/techniekpunt B · RFID 12"]
 ```
 
-De precieze vertakking moet overeenkomen met de getekende kabelroute op het fysieke paneel. Elk zichtbaar kabelsegment krijgt een eigen reeks led-indexen en een eigen maximale stroom.
+Elke verdieping heeft daarmee precies vier RFID-punten. Dat sluit één-op-één aan op de vier `CS/SDA + GND`-aderparen van de afzonderlijke UTP-kabel voor die verdieping. De precieze vertakking moet overeenkomen met de getekende kabelroute op het fysieke paneel. Elk zichtbaar kabelsegment krijgt een eigen reeks led-indexen en een eigen maximale stroom.
 
 ## 3. Apparatenmodel
 
@@ -158,7 +162,7 @@ Met de bevestigde ESP-WROOM-32-module zijn daarmee twaalf CS-uitgangen plus de d
 ## 7. Voeding en hardware-aandachtspunten
 
 - Voed alle RC522-modules met **3,3 V**, nooit met 5 V op hun 3V3-aansluiting.
-- Gebruik bij acht lezers bij voorkeur een aparte, stabiele 3,3 V-regelaar met voldoende marge en verbind alle massa's.
+- Gebruik bij twaalf lezers bij voorkeur een aparte, stabiele 3,3 V-regelaar met voldoende marge en verbind alle massa's.
 - Voed een 5 V adresseerbare ledstrip uit een aparte 5 V-voeding; niet uit de ESP32-print.
 - Verbind de massa van ESP32, 3,3 V-voeding en ledvoeding.
 - Plaats bij de ledstrip een serieweerstand van circa 330–470 ohm in de datalijn, een buffer zoals een 74AHCT125 voor het 5 V-dataniveau en een bufferelco bij de voedingsingang.
@@ -202,7 +206,7 @@ RST kan lokaal hoog worden gehouden of via een aanvullende verbinding gemeenscha
 
 ## 8. Firmware-opbouw
 
-1. Initialiseer SPI, de acht RC522-instanties en de ledstrip.
+1. Initialiseer SPI, de twaalf RC522-instanties en de ledstrip.
 2. Poll iedere lezer cyclisch en filter kaartwisselingen tegen klapperen.
 3. Vertaal UID naar apparaat; onbekende tags geven een herkenbare foutkleur.
 4. Koppel ieder gedetecteerd apparaat aan het knooppunt van de betreffende lezer.
@@ -212,7 +216,7 @@ RST kan lokaal hoog worden gehouden of via een aanvullende verbinding gemeenscha
 8. Werk alle ledsegmenten als één niet-blokkerende animatie bij.
 9. Toon via USB-serieel een tabel met apparaat, locatie, segmentvermogen en overschrijdingen voor testen en uitleg.
 
-De bediening van vaste apparaten kan later met drukknoppen, schakelaars of vaste RFID-posities worden uitgevoerd. Voor een eerste prototype zijn schakelaars eenvoudiger en laten zij de acht RFID-lezers vrij voor verplaatsbare apparatuur.
+De bediening van vaste apparaten kan later met drukknoppen, schakelaars of vaste RFID-posities worden uitgevoerd. Voor een eerste prototype zijn schakelaars eenvoudiger en laten zij de twaalf RFID-lezers vrij voor verplaatsbare apparatuur.
 
 ## 9. Aanbevolen bouwvolgorde
 
@@ -220,13 +224,13 @@ De bediening van vaste apparaten kan later met drukknoppen, schakelaars of vaste
 2. Implementeer UID-herkenning en plaatsbepaling.
 3. Test de netwerkberekening met één belasting en één thuisaccu op verschillende knopen.
 4. Voeg per-segment animatie en grensbewaking toe.
-5. Bouw daarna uit naar acht lezers en de volledige fysieke huisvorm.
+5. Bouw daarna uit naar twaalf lezers en de volledige fysieke huisvorm.
 6. Meet bij de volledige opstelling de 3,3 V-voeding en controleer RFID-betrouwbaarheid voordat het paneel definitief wordt gesloten.
 
 ## 10. Nog vast te leggen voor het definitieve schema
 
 - het exacte aantal ledpixels en de pixelvolgorde per kabelsegment;
-- de plaats van de acht RFID-lezers op de huistekening;
+- de definitieve plaats van de twaalf RFID-lezers op de huistekening;
 - welke vaste apparaten gelijktijdig schakelbaar zijn;
 - het vermogen en laad-/ontlaadgedrag van beide thuisaccu's;
 - de gekozen grenzen per kabel, contactdoos, stekkerdoos en groep;
