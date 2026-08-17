@@ -1,0 +1,9 @@
+# ESP-IDF buildproducten en lokaal gegenereerde configuratie
+/build/
+/managed_components/
+/sdkconfig
+/sdkconfig.old
+
+# Editor- en macOS-bestanden
+.DS_Store
+.vscode/

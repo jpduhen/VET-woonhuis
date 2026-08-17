@@ -1,0 +1,2 @@
+# Het gebruikte ESP32 DevKit-board heeft 4 MB SPI-flash.
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
